@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            background: blue;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Password Generator</h2>
+        <label for="length">Length:</label>
+        <input type="number" id="length" value="12" min="6">
+        <br>
+        <label><input type="checkbox" id="digits" checked> Include Digits</label>
+        <br>
+        <label><input type="checkbox" id="specials" checked> Include Special Characters</label>
+        <br>
+        <button onclick="generatePassword()">Generate Password</button>
+        <h3 id="password"></h3>
+    </div>
+    
+    <script>
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const useDigits = document.getElementById('digits').checked;
+            const useSpecials = document.getElementById('specials').checked;
+            
+            fetch('/generate-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ length, useDigits, useSpecials })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('password').textContent = data.password;
+            });
+        }
+    </script>
+</body>
+</html>
